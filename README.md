@@ -31,6 +31,7 @@ Platforms
 | Alpine Linux   | cairo-dev libxinerama-dev xdotool-dev libxrandr-dev musl-dev |  |
 | Debian, Ubuntu |  libcairo2-dev libxinerama-dev libxdo-dev libxrandr-dev |  |
 | NetBSD         | xdotool                | Use gmake |
+| FreeBSD        | pkgconf libX11 xdotool | Not verified from clean system. Use gmake |
 | openSUSE Leap/Tumbleweed | cairo-devel libXinerama-devel xdotool-devel libXrandr-devel glib2-devel |           |
 | RHEL/CentOS 7  | cairo-devel libXinerama-devel libxdo-devel libXrandr-devel glib2-devel | Requires EPEL |
 
