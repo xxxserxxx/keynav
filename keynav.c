@@ -24,10 +24,7 @@
 #include <X11/extensions/Xrandr.h>
 #include <glib.h>
 #include <cairo-xlib.h>
-
-#ifdef PROFILE_THINGS
 #include <time.h>
-#endif
 
 #include <xdo.h>
 #include "keynav_version.h"
@@ -125,6 +122,8 @@ static struct appstate appstate = {
 };
 
 static int drag_button = 0;
+static int lag_default = 0;
+int lag = 0;
 static char drag_modkeys[128];
 
 /* history tracking */
@@ -162,6 +161,7 @@ void cmd_shell(char *args);
 void cmd_start(char *args);
 void cmd_warp(char *args);
 void cmd_windowzoom(char *args);
+void cmd_lag(char *args);
 
 void update();
 void correct_overflow();
@@ -234,6 +234,7 @@ dispatch_t dispatch[] = {
   "restart", cmd_restart,
   "record", cmd_record,
   "playback", cmd_playback,
+  "lag", cmd_lag,
   NULL, NULL,
 };
 
@@ -1017,6 +1018,7 @@ void cmd_end(char *args) {
   XUngrabKeyboard(dpy, CurrentTime);
 
   zone = 0;
+  lag = 0;
 }
 
 void cmd_toggle_start(char *args) {
@@ -1375,6 +1377,17 @@ void cmd_record(char *args) {
     appstate.recording = record_getkey;
   }
 }
+
+void cmd_lag(char *args) {
+  if (!ISACTIVE)
+    return;
+
+  if (args == NULL) {
+    lag = lag_default;
+  } else {
+    sscanf(args, "%d", &lag);
+  }
+} /* void cmd_lag */
 
 void update() {
   if (!ISACTIVE)
@@ -1739,6 +1752,7 @@ void handle_commands(char *commands) {
 
         found = 1;
         dispatch[i].func(args);
+        if (lag > 0) usleep(lag * 1000L);
       }
     }
 
