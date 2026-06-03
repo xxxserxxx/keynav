@@ -285,6 +285,11 @@ Exit keynav. The process will shutdown.
 Restart keynav. Useful for reloading the configuration. SIGHUP and SIGUSR1 also
 invoke this command.
 
+=item B<sleep> I<milliseconds>
+
+Pause for this amount of time. Useful in macros where keynav plays back faster
+than an application GUI can respond to.
+
 =back
 
 =head1 CUT AND MOVE VALUES

@@ -24,10 +24,7 @@
 #include <X11/extensions/Xrandr.h>
 #include <glib.h>
 #include <cairo-xlib.h>
-
-#ifdef PROFILE_THINGS
 #include <time.h>
-#endif
 
 #include <xdo.h>
 #include "keynav_version.h"
@@ -162,6 +159,7 @@ void cmd_shell(char *args);
 void cmd_start(char *args);
 void cmd_warp(char *args);
 void cmd_windowzoom(char *args);
+void cmd_sleep(char *args);
 
 void update();
 void correct_overflow();
@@ -234,6 +232,7 @@ dispatch_t dispatch[] = {
   "restart", cmd_restart,
   "record", cmd_record,
   "playback", cmd_playback,
+  "sleep", cmd_sleep,
   NULL, NULL,
 };
 
@@ -1375,6 +1374,20 @@ void cmd_record(char *args) {
     appstate.recording = record_getkey;
   }
 }
+
+void cmd_sleep(char *args) {
+  if (!ISACTIVE)
+    return;
+
+  int sleep;
+  if (args == NULL) {
+    return;
+  } else {
+    sscanf(args, "%d", &sleep);
+  }
+
+  usleep(sleep * 1000L);
+} /* void cmd_sleep */
 
 void update() {
   if (!ISACTIVE)
